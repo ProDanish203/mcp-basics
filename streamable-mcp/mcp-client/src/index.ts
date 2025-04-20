@@ -1,38 +1,7 @@
 import { config } from "dotenv";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { CoreMessage } from "ai";
-import { createInterface } from "readline/promises";
 import { MCPClient } from "./mcp.js";
 
 config();
-
-try {
-  const getGemini = async () => {
-    const gemini = await createGoogleGenerativeAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    });
-    return gemini;
-  };
-
-  const chatHistory: CoreMessage[] = [];
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: "> ",
-  });
-
-  const chatLoop = async () => {
-    const question = await rl.question("You: ");
-
-    chatHistory.push({
-      role: "user",
-      content: question,
-    });
-  };
-} catch (err) {
-  console.error("Error:", err);
-  process.exit(1);
-}
 
 async function main() {
   const client = new MCPClient("sse-server");
